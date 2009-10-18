@@ -8,11 +8,10 @@ no strict 'refs';
 use vars qw($VERSION @ISA);
 
 use List::MoreUtils;
-use Params::Util qw(_ARRAY);
 use Template::Plugin::Procedural;
 use vars qw(@ISA $VERSION);
 
-$VERSION = '0.01';
+$VERSION = '0.02';
 @ISA     = qw(Template::Plugin::Procedural);
 
 =head1 NAME

@@ -1,4 +1,8 @@
 Revision history for Perl module Template::Plugin::ListMoreUtils
 
+0.02 Thu Aug 27 17:47 UTC 2009
+    - Remove unused Params::Util from ListMoreUtils.pm
+    - added author information to Build.PL
+
 0.01 Tue Aug 26 10:30 UTC 2009
     - original version; created using ExtUtils::ModuleMaker 0.51

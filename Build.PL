@@ -4,6 +4,7 @@ use Module::Build;
 my $build = Module::Build->new
 (
     module_name     => 'Template::Plugin::ListMoreUtils',
+    dist_author     => 'Jens Rehsack <rehsack@cpan.org>',
     license         => 'perl',
     requires        => {
         'List::MoreUtils' => '0.22',

@@ -6,7 +6,7 @@ use warnings;
 use vars qw($VERSION @ISA $VMETHOD_PACKAGE @LIST_OPS);
 
 use Template::Plugin::VMethods;
-$VERSION = '0.01';
+$VERSION = '0.02';
 @ISA     = qw(Template::Plugin::VMethods);
 
 use Template::Plugin::ListMoreUtils;
