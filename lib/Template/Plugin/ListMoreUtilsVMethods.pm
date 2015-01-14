@@ -6,7 +6,7 @@ use warnings;
 use vars qw($VERSION @ISA $VMETHOD_PACKAGE @LIST_OPS);
 
 use Template::Plugin::VMethods;
-$VERSION = '0.02';
+$VERSION = '0.03';
 @ISA     = qw(Template::Plugin::VMethods);
 
 use Template::Plugin::ListMoreUtils;
@@ -150,30 +150,54 @@ Except the typical limitations known from perl functions embedded in
 L<Template::Toolkit>, the only limitation I currently miss is being
 able to use TT2 defined macros as callback.
 
+=head1 BUGS
+
+Please report any bugs or feature requests to
+C<bug-template-plugin-listmoreutils at rt.cpan.org>, or through the web interface at
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Template-Plugin-ListMoreUtils>.
+I will be notified, and then you'll automatically be notified of progress
+on your bug as I make changes.
+
 =head1 SUPPORT
 
-Free support can be requested via regular CPAN bug-tracking system. There is
-no guaranteed reaction time or solution time. It depends on business load.
-That doesn't mean that ticket via rt aren't handles as soon as possible, that
-means that soon depends on how much I have to do.
+You can find documentation for this module with the perldoc command.
 
-Business and commercial support should be aquired via preferred freelancer
+    perldoc Template::Plugin::ListMoreUtils
+
+You can also look for information at:
+
+=over 4
+
+=item * RT: CPAN's request tracker
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Template-Plugin-ListMoreUtils>
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/Template-Plugin-ListMoreUtils>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/d/Template-Plugin-ListMoreUtils>
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/Template-Plugin-ListMoreUtils/>
+
+=back
+
+Business and commercial support should be acquired via preferred freelancer
 agencies.
 
-=head1 AUTHOR
+=head1 LICENSE AND COPYRIGHT
 
-    Jens Rehsack
-    CPAN ID: REHSACK
-    rehsack@cpan.org
-    http://search.cpan.org/~rehsack/
+Copyright 2009-2015 Jens Rehsack.
 
-=head1 COPYRIGHT
+This program is free software; you can redistribute it and/or modify it
+under the terms of either: the GNU General Public License as published
+by the Free Software Foundation; or the Artistic License.
 
-This program is free software; you can redistribute
-it and/or modify it under the same terms as Perl itself.
-
-The full text of the license can be found in the
-LICENSE file included with this module.
+See http://dev.perl.org/licenses/ for more information.
 
 =head1 SEE ALSO
 
