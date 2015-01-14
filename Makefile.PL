@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use 5.008001;
+use 5.008003;
 
 use ExtUtils::MakeMaker;
 
@@ -20,19 +20,19 @@ my %TEST_DEPS = (
 );
 
 WriteMakefile1(
-    MIN_PERL_VERSION => '5.008001',
+    MIN_PERL_VERSION => '5.008003',
     META_ADD         => {
         'meta-spec' => { version => 2 },
         resources   => {
-            homepage   => 'https://metacpan.org/release/File-ConfigDir',
+            homepage   => 'https://metacpan.org/release/Template-Plugin-ListMoreUtils',
             repository => {
-                url  => 'git@github.com:perl5-utils/File-ConfigDir.git',
-                web  => 'https://github.com/perl5-utils/File-ConfigDir',
+                url  => 'git@github.com:perl5-utils/Template-Plugin-ListMoreUtils.git',
+                web  => 'https://github.com/perl5-utils/Template-Plugin-ListMoreUtils',
                 type => 'git',
             },
             bugtracker => {
-                web    => 'http://rt.cpan.org/Public/Dist/Display.html?Name=File-ConfigDir',
-                mailto => 'bug-file-configdir@rt.cpan.org',
+                web    => 'http://rt.cpan.org/Public/Dist/Display.html?Name=Template-Plugin-ListMoreUtils',
+                mailto => 'bug-template-plugin-listmoreutils@rt.cpan.org',
             },
             license => 'http://dev.perl.org/licenses/',
         },
@@ -55,13 +55,9 @@ WriteMakefile1(
             build   => { requires => {%BUILD_DEPS} },
             test    => { requires => {%TEST_DEPS} },
             runtime => {
-                recommends => {
-                    'File::HomeDir'   => '0.50',
-                    'List::MoreUtils' => '0.22',
-                },
                 requires => {
                     %RUN_DEPS,
-                    perl => '5.8.1',
+                    perl => '5.008003',
                 },
             },
         },
