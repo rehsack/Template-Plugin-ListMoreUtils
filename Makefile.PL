@@ -1,12 +1,12 @@
 use strict;
 use warnings;
 
-use 5.008003;
+use 5.008001;
 
 use ExtUtils::MakeMaker;
 
 my %RUN_DEPS = (
-    'List::MoreUtils'            => '0.402',
+    'List::MoreUtils'            => '0.412',
     'Template'                   => '2.20',
     'Template::Plugin::VMethods' => '0.02'
 );
@@ -20,7 +20,7 @@ my %TEST_DEPS = (
 );
 
 WriteMakefile1(
-    MIN_PERL_VERSION => '5.008003',
+    MIN_PERL_VERSION => '5.008001',
     META_ADD         => {
         'meta-spec' => { version => 2 },
         resources   => {
@@ -49,28 +49,22 @@ WriteMakefile1(
                     'Test::Spelling'                      => 0,
                 },
             },
-            configure => {
-                requires => {%CONFIGURE_DEPS},
-            },
-            build   => { requires => {%BUILD_DEPS} },
-            test    => { requires => {%TEST_DEPS} },
-            runtime => {
-                requires => {
-                    %RUN_DEPS,
-                    perl => '5.008003',
-                },
-            },
+            configure => { requires => {%CONFIGURE_DEPS} },
+            build     => { requires => {%BUILD_DEPS} },
+            test      => { requires => {%TEST_DEPS} },
+            runtime   => { requires => {%RUN_DEPS} },
         },
     },
-    NAME           => 'Template::Plugin::ListMoreUtils',
-    VERSION_FROM   => 'lib/Template/Plugin/ListMoreUtils.pm',
-    ABSTRACT_FROM  => 'lib/Template/Plugin/ListMoreUtils.pm',
-    LICENSE        => 'perl',
-    AUTHOR         => q{Jens Rehsack <rehsack@cpan.org>},
-    PREREQ_PM      => \%RUN_DEPS,
-    BUILD_REQUIRES => \%BUILD_DEPS,
-    TEST_REQUIRES  => \%TEST_DEPS,
-    test           => { TESTS => 't/*.t xt/*.t' },
+    NAME               => 'Template::Plugin::ListMoreUtils',
+    VERSION_FROM       => 'lib/Template/Plugin/ListMoreUtils.pm',
+    ABSTRACT_FROM      => 'lib/Template/Plugin/ListMoreUtils.pm',
+    LICENSE            => 'perl',
+    AUTHOR             => q{Jens Rehsack <rehsack@cpan.org>},
+    BUILD_REQUIRES     => \%BUILD_DEPS,
+    CONFIGURE_REQUIRES => \%CONFIGURE_DEPS,
+    PREREQ_PM          => \%RUN_DEPS,
+    TEST_REQUIRES      => \%TEST_DEPS,
+    test               => { TESTS => 't/*.t xt/*.t' },
 );
 
 sub WriteMakefile1
