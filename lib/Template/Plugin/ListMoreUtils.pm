@@ -11,7 +11,7 @@ use List::MoreUtils;
 use Template::Plugin::Procedural;
 use vars qw(@ISA $VERSION);
 
-$VERSION = '0.03';
+$VERSION = '0.04';
 @ISA     = qw(Template::Plugin::Procedural);
 
 =head1 NAME
