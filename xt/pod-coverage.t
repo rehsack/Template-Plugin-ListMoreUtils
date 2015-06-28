@@ -7,4 +7,9 @@ use Test::More;
 use Test::Pod::Coverage;
 use Pod::Coverage;
 
-all_pod_coverage_ok();
+my @modules = all_modules();
+plan tests => scalar @modules - 1;
+foreach my $module (@modules) {
+   next if ($module eq 'Template::Plugin::ListMoreUtilsVMethods');
+   pod_coverage_ok($module);
+}
