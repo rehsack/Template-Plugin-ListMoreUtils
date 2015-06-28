@@ -80,6 +80,30 @@ sub none(&\@) { List::MoreUtils::none( \&{ $_[0] }, @{ $_[1] } ); }
 
 sub notall(&\@) { List::MoreUtils::notall( \&{ $_[0] }, @{ $_[1] } ); }
 
+=head2 any_u BLOCK LIST
+
+=cut
+
+sub any_u(&\@) { List::MoreUtils::any_u( \&{ $_[0] }, @{ $_[1] } ); }
+
+=head2 all_u BLOCK LIST
+
+=cut
+
+sub all_u(&\@) { List::MoreUtils::all_u( \&{ $_[0] }, @{ $_[1] } ); }
+
+=head2 none_u BLOCK LIST
+
+=cut
+
+sub none_u(&\@) { List::MoreUtils::none_u( \&{ $_[0] }, @{ $_[1] } ); }
+
+=head2 notall_u BLOCK LIST
+
+=cut
+
+sub notall_u(&\@) { List::MoreUtils::notall_u( \&{ $_[0] }, @{ $_[1] } ); }
+
 =head2 true BLOCK LIST
 
 =cut
@@ -109,6 +133,69 @@ sub firstidx(&\@) { List::MoreUtils::firstidx( \&{ $_[0] }, @{ $_[1] } ); }
 
 sub lastidx(&\@) { List::MoreUtils::lastidx( \&{ $_[0] }, @{ $_[1] } ); }
 *last_index = *{'lastidx'}{CODE};
+
+=head2 onlyidx BLOCK LIST
+
+=head2 only_index BLOCK LIST
+
+=cut
+
+sub onlyidx(&\@) { List::MoreUtils::onlyidx( \&{ $_[0] }, @{ $_[1] } ); }
+*only_index = *{'onlyidx'}{CODE};
+
+=head2 firstres BLOCK LIST
+
+=head2 first_result BLOCK LIST
+
+=cut
+
+sub firstres(&\@) { List::MoreUtils::firstres( \&{ $_[0] }, @{ $_[1] } ); }
+*first_result = *{'firstres'}{CODE};
+
+=head2 lastres BLOCK LIST
+
+=head2 last_result BLOCK LIST
+
+=cut
+
+sub lastres(&\@) { List::MoreUtils::lastres( \&{ $_[0] }, @{ $_[1] } ); }
+*last_result = *{'lastres'}{CODE};
+
+=head2 onlyres BLOCK LIST
+
+=head2 only_result BLOCK LIST
+
+=cut
+
+sub onlyres(&\@) { List::MoreUtils::onlyres( \&{ $_[0] }, @{ $_[1] } ); }
+*only_result = *{'onlyres'}{CODE};
+
+=head2 firstval BLOCK LIST
+
+=head2 first_value BLOCK LIST
+
+=cut
+
+sub firstval(&\@) { List::MoreUtils::firstval( \&{ $_[0] }, @{ $_[1] } ); }
+*first_value = *{'firstval'}{CODE};
+
+=head2 lastval BLOCK LIST
+
+=head2 last_value BLOCK LIST
+
+=cut
+
+sub lastval(&\@) { List::MoreUtils::lastval( \&{ $_[0] }, @{ $_[1] } ); }
+*last_value = *{'lastval'}{CODE};
+
+=head2 onlyval BLOCK LIST
+
+=head2 only_value BLOCK LIST
+
+=cut
+
+sub onlyval(&\@) { List::MoreUtils::onlyval( \&{ $_[0] }, @{ $_[1] } ); }
+*only_value = *{'onlyval'}{CODE};
 
 =head2 insert_after BLOCK VALUE LIST
 
@@ -159,24 +246,6 @@ sub before_incl(&\@) { List::MoreUtils::before_incl( \&{ $_[0] }, @{ $_[1] } ); 
 
 sub indexes(&\@) { List::MoreUtils::indexes( \&{ $_[0] }, @{ $_[1] } ); }
 
-=head2 firstval BLOCK LIST
-
-=head2 first_value BLOCK LIST
-
-=cut
-
-sub firstval(&\@) { List::MoreUtils::firstval( \&{ $_[0] }, @{ $_[1] } ); }
-*first_value = *{'firstval'}{CODE};
-
-=head2 lastval BLOCK LIST
-
-=head2 last_value BLOCK LIST
-
-=cut
-
-sub lastval(&\@) { List::MoreUtils::lastval( \&{ $_[0] }, @{ $_[1] } ); }
-*last_value = *{'lastval'}{CODE};
-
 =head2 pairwise BLOCK LIST LIST
 
 Unlike the original C<pairwise>, both variables are given through C<@_>.
@@ -199,9 +268,18 @@ sub minmax(\@) { List::MoreUtils::minmax( @{ $_[0] } ); }
 
 =head2 uniq LIST
 
+=head2 distinct LIST
+
 =cut
 
 sub uniq(\@) { List::MoreUtils::uniq( @{ $_[0] } ); }
+*distinct = *{'uniq'}{CODE};
+
+=head2 singleton LIST
+
+=cut
+
+sub singleton(\@) { List::MoreUtils::singleton( @{ $_[0] } ); }
 
 =head2 mesh
 
@@ -220,24 +298,26 @@ sub part(&\@) { List::MoreUtils::part( \&{ $_[0] }, @{ $_[1] } ) }
 
 =head2 bsearch BLOCK LIST
 
-This function is available only when List::MoreUtils 0.23 or newer is used.
+=cut
 
-Unlike the original C<bsearch>, the value to compare with is passed in
-C<$_[0]>.  Template::Toolkit uses eval to evaluate the perl code declared
-there and don't pass C<$_> (which sounds reasonable to me).
+sub bsearch(&\@)
+{
+    my $user_fn = $_[0];
+    List::MoreUtils::bsearch( sub { $user_fn->($_) }, @{ $_[1] } );
+}
+
+=head2 bsearchidx BLOCK LIST
+
+=head2 bsearch_index BLOCK LIST
 
 =cut
 
-if ( defined( *{'List::MoreUtils::bsearch'}{CODE} ) )
+sub bsearchidx(&\@)
 {
-    eval <<'EOBS';
-sub bsearch(&\@)
-{
-    my $userfn = $_[0];
-    List::MoreUtils::bsearch( sub { &{$userfn}( $_ ); }, @{$_[1]} );
+    my $user_fn = $_[0];
+    List::MoreUtils::bsearchidx( sub { $user_fn->($_) }, @{ $_[1] } );
 }
-EOBS
-}
+*bsearch_index = *{'bsearchidx'}{CODE};
 
 =head1 LIMITATION
 
@@ -248,7 +328,7 @@ able to use TT2 defined macros as callback.
 =head1 BUGS
 
 Please report any bugs or feature requests to
-C<bug-template-plugin-listmoreutils at rt.cpan.org>, or through the web interface at
+C<bug-Template-Plugin-ListMoreUtils at rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Template-Plugin-ListMoreUtils>.
 I will be notified, and then you'll automatically be notified of progress
 on your bug as I make changes.

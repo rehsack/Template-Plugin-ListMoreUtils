@@ -2,10 +2,13 @@
 
 # t/002_objinterface.t - tests using the OO interface
 
-use Test::More tests => 46;
+use Test::More tests => 52;
 
 is tt( q{[% ListMoreUtils.uniq( my1to9even.merge( my1to9prim, my1to9odd ) ).join(""); %]} ), "246835719", "uniq 1/2";
 is tt( q{[% ListMoreUtils.uniq( [ 1, 1, 2, 2, 3, 5, 3, 4 ] ).join(""); %]} ), "12354", "uniq 2/2";
+
+is tt( q{[% ListMoreUtils.singleton( my1to9even.merge( my1to9prim, my1to9odd ) ).join(""); %]} ), "46819", "singleton 1/2";
+is tt( q{[% ListMoreUtils.singleton( [ 1, 1, 2, 2, 3, 5, 3, 4 ] ).join(""); %]} ), "54", "singleton 2/2";
 
 is tt( q{[% ListMoreUtils.minmax( my1to9even.merge( my1to9prim, my1to9odd ) ).join(""); %]} ), "19", "minmax 1/2";
 is tt( q{[% ListMoreUtils.minmax( [ 1, 1, 2, 2, 3, 5, 3, 4 ] ).join(""); %]} ), "15", "minmax 2/2";
@@ -104,8 +107,6 @@ is tt( q/[% PERL %] my $i = 0; my $fn = sub { $_[1]->[$i++] % 2 }; $stash->set( 
        q{[% parts = ListMoreUtils.part( \mod2, my1to9even.merge( my1to9prim, my1to9odd ) );
             parts.0 = parts.0.join(","); parts.1 = parts.1.join(","); parts.join(":"); %]} ), "2,4,6,8,2:3,5,7,1,3,5,7,9", "part";
 
-SKIP: {
-skip( "bsearch is not available from List::MoreUtils", 4 ) unless( defined( *{'List::MoreUtils::bsearch'}{CODE} ) );
 is tt( q/[% PERL %] my $fn = sub { $_[0] <=> 3 }; $stash->set( cmp3 => $fn ); [% END %]/,
        q{[% ListMoreUtils.bsearch( \cmp3, my1to9prim ) ? "Found" : "Not found" %]} ), "Found", "bsearch 1/4";
 is tt( q/[% PERL %] my $fn = sub { $_[0] cmp 'e' }; $stash->set( cmpe => $fn ); [% END %]/,
@@ -114,7 +115,15 @@ is tt( q/[% PERL %] my $fn = sub { 3 <=> $_[0] }; $stash->set( cmp3 => $fn ); [%
        q{[% ListMoreUtils.bsearch( \cmp3, my1to9prim.reverse ) ? "Found" : "Not found" %]} ), "Found", "bsearch 3/4";
 is tt( q/[% PERL %] my $fn = sub { $_[0] <=> 9 }; $stash->set( cmp9 => $fn ); [% END %]/,
        q{[% ListMoreUtils.bsearch( \cmp9, my1to9prim ) ? "Found" : "Not found" %]} ), "Not found", "bsearch 4/4";
-}
+
+is tt( q/[% PERL %] my $fn = sub { $_[0] <=> 3 }; $stash->set( cmp3 => $fn ); [% END %]/,
+       q{[% ListMoreUtils.bsearchidx( \cmp3, my1to9prim ) %]} ), "1", "bsearchidx 1/4";
+is tt( q/[% PERL %] my $fn = sub { $_[0] cmp 'e' }; $stash->set( cmpe => $fn ); [% END %]/,
+       q{[% ListMoreUtils.bsearchidx( \cmpe, fiveletters ) %]} ), "4", "bsearchidx 2/4";
+is tt( q/[% PERL %] my $fn = sub { 3 <=> $_[0] }; $stash->set( cmp3 => $fn ); [% END %]/,
+       q{[% ListMoreUtils.bsearchidx( \cmp3, my1to9prim.reverse ) %]} ), "2", "bsearchidx 3/4";
+is tt( q/[% PERL %] my $fn = sub { $_[0] <=> 9 }; $stash->set( cmp9 => $fn ); [% END %]/,
+       q{[% ListMoreUtils.bsearchidx( \cmp9, my1to9prim ) %]} ), "-1", "bsearchidx 4/4";
 
 sub tt
 {

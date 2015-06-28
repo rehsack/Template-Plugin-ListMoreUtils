@@ -13,32 +13,45 @@ use Template::Plugin::ListMoreUtils;
 $VMETHOD_PACKAGE = 'Template::Plugin::ListMoreUtils';
 
 @LIST_OPS = (
-              qw(mesh zip uniq minmax),
-              any                 => \&any,
-              all                 => \&all,
-              none                => \&none,
-              notall              => \&notall,
-              true                => \&true,
-              false               => \&false,
-              firstidx            => \&firstidx,
-              first_index         => \&first_index,
-              lastidx             => \&lastidx,
-              last_index          => \&last_index,
-              insert_after        => \&insert_after,
-              insert_after_string => \&insert_after_string,
-              apply               => \&apply,
-              after               => \&after,
-              after_incl          => \&after_incl,
-              before              => \&before,
-              before_incl         => \&before_incl,
-              indexes             => \&indexes,
-              firstval            => \&firstval,
-              first_value         => \&first_value,
-              lastval             => \&lastval,
-              last_value          => \&last_value,
-              pairwise            => \&pairwise,
-              part                => \&part
-            );
+    qw(mesh zip uniq minmax singleton),
+    any                 => \&any,
+    all                 => \&all,
+    none                => \&none,
+    notall              => \&notall,
+    true                => \&true,
+    false               => \&false,
+    firstidx            => \&firstidx,
+    first_index         => \&first_index,
+    lastidx             => \&lastidx,
+    last_index          => \&last_index,
+    onlyidx             => \&onlyidx,
+    only_index          => \&only_index,
+    firstval            => \&firstval,
+    first_value         => \&first_value,
+    lastval             => \&lastval,
+    last_value          => \&last_value,
+    onlyval             => \&onlyval,
+    only_value          => \&only_value,
+    firstval            => \&firstval,
+    first_result        => \&first_result,
+    lastval             => \&lastval,
+    last_result         => \&last_result,
+    onlyval             => \&onlyval,
+    only_result         => \&only_result,
+    insert_after        => \&insert_after,
+    insert_after_string => \&insert_after_string,
+    apply               => \&apply,
+    after               => \&after,
+    after_incl          => \&after_incl,
+    before              => \&before,
+    before_incl         => \&before_incl,
+    indexes             => \&indexes,
+    pairwise            => \&pairwise,
+    part                => \&part,
+    bsearch             => \&bsearch,
+    bsearchidx          => \&bsearchidx,
+    bsearch_index       => \&bsearch_index,
+);
 
 =head1 NAME
 
@@ -101,6 +114,34 @@ sub lastidx(\@&) { List::MoreUtils::lastidx( \&{ $_[1] }, @{ $_[0] } ); }
 sub last_index(\@&);
 *last_index = *{'lastidx'}{CODE};
 
+sub onlyidx(\@&) { List::MoreUtils::onlyidx( \&{ $_[1] }, @{ $_[0] } ); }
+sub only_index(\@&);
+*only_index = *{'onlyidx'}{CODE};
+
+sub firstres(\@&) { List::MoreUtils::firstres( \&{ $_[1] }, @{ $_[0] } ); }
+sub first_result(\@&);
+*first_result = *{'firstres'}{CODE};
+
+sub lastres(\@&) { List::MoreUtils::lastres( \&{ $_[1] }, @{ $_[0] } ); }
+sub last_result(\@&);
+*last_result = *{'lastres'}{CODE};
+
+sub onlyres(\@&) { List::MoreUtils::onlyres( \&{ $_[1] }, @{ $_[0] } ); }
+sub only_result(\@&);
+*only_result = *{'onlyres'}{CODE};
+
+sub firstval(\@&) { List::MoreUtils::firstval( \&{ $_[1] }, @{ $_[0] } ); }
+sub first_value(\@&);
+*first_value = *{'firstval'}{CODE};
+
+sub lastval(\@&) { List::MoreUtils::lastval( \&{ $_[1] }, @{ $_[0] } ); }
+sub last_value(\@&);
+*last_value = *{'lastval'}{CODE};
+
+sub onlyval(\@&) { List::MoreUtils::onlyval( \&{ $_[1] }, @{ $_[0] } ); }
+sub only_value(\@&);
+*only_value = *{'onlyval'}{CODE};
+
 sub insert_after (\@&$) { List::MoreUtils::insert_after( \&{ $_[1] }, $_[2], @{ $_[0] } ); }
 sub insert_after_string (\@$$) { List::MoreUtils::insert_after_string( $_[1], $_[2], @{ $_[0] } ); }
 
@@ -116,32 +157,30 @@ sub before_incl(\@&) { List::MoreUtils::before_incl( \&{ $_[1] }, @{ $_[0] } ); 
 
 sub indexes(\@&) { List::MoreUtils::indexes( \&{ $_[1] }, @{ $_[0] } ); }
 
-sub firstval(\@&) { List::MoreUtils::firstval( \&{ $_[1] }, @{ $_[0] } ); }
-sub first_value(\@&);
-*first_value = *{'firstval'}{CODE};
-
-sub lastval(\@&) { List::MoreUtils::lastval( \&{ $_[1] }, @{ $_[0] } ); }
-sub last_value(\@&);
-*last_value = *{'lastval'}{CODE};
-
 sub pairwise(\@&\@)
 {
     my $userfn = $_[1];
-    List::MoreUtils::pairwise( sub { &{$userfn}( $a, $b ); }, @{ $_[0] }, @{ $_[2] } );
+    List::MoreUtils::pairwise( sub { $userfn->( $a, $b ); }, @{ $_[0] }, @{ $_[2] } );
 }
 
 sub part(\@&) { List::MoreUtils::part( \&{ $_[1] }, @{ $_[0] } ) }
 
-if ( defined( *{'List::MoreUtils::bsearch'}{CODE} ) )
-{
-    eval <<'EOBS';
 sub bsearch(\@&)
 {
     my $userfn = $_[1];
-    List::MoreUtils::bsearch( sub { &{$userfn}( $_ ); }, @{$_[0]} );
+    List::MoreUtils::bsearch( sub { $userfn->($_) }, @{ $_[0] } );
 }
-    push( @LIST_OPS, bsearch => \&bsearch );
-EOBS
+
+sub bsearchidx(\@&)
+{
+    my $userfn = $_[1];
+    List::MoreUtils::bsearchidx( sub { $userfn->($_) }, @{ $_[0] } );
+}
+
+sub bsearch_index(\@&)
+{
+    my $userfn = $_[1];
+    List::MoreUtils::bsearch_index( sub { $userfn->($_) }, @{ $_[0] } );
 }
 
 =head1 LIMITATION
@@ -153,7 +192,7 @@ able to use TT2 defined macros as callback.
 =head1 BUGS
 
 Please report any bugs or feature requests to
-C<bug-template-plugin-listmoreutils at rt.cpan.org>, or through the web interface at
+C<bug-Template-Plugin-ListMoreUtils at rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Template-Plugin-ListMoreUtils>.
 I will be notified, and then you'll automatically be notified of progress
 on your bug as I make changes.

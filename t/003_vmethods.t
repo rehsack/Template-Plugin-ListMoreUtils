@@ -2,10 +2,13 @@
 
 # t/003_vmethods.t - tests using the virtual methods
 
-use Test::More tests => 46;
+use Test::More tests => 52;
 
 is tt( q{[% my1to9even.merge( my1to9prim, my1to9odd ).uniq.join(""); %]} ), "246835719", "uniq 1/2";
 is tt( q{[% l = [ 1, 1, 2, 2, 3, 5, 3, 4 ]; l.uniq.join(""); %]} ), "12354", "uniq 2/2";
+
+is tt( q{[% my1to9even.merge( my1to9prim, my1to9odd ).singleton.join(""); %]} ), "46819", "singleton 1/2";
+is tt( q{[% l = [ 1, 1, 2, 2, 3, 5, 3, 4 ]; l.singleton.join(""); %]} ), "54", "singleton 2/2";
 
 is tt( q{[% my1to9even.merge( my1to9prim, my1to9odd ).minmax.join(""); %]} ), "19", "minmax 1/2";
 is tt( q{[% l = [ 1, 1, 2, 2, 3, 5, 3, 4 ]; l.minmax.join(""); %]} ), "15", "minmax 2/2";
@@ -104,8 +107,6 @@ is tt( q/[% PERL %] my $i = 0; my $fn = sub { $_[0]->[$i++] % 2 }; $stash->set( 
        q{[% parts = my1to9even.merge( my1to9prim, my1to9odd ).part( \mod2 );
             parts.0 = parts.0.join(","); parts.1 = parts.1.join(","); parts.join(":"); %]} ), "2,4,6,8,2:3,5,7,1,3,5,7,9", "part";
 
-SKIP: {
-skip( "bsearch is not available from List::MoreUtils", 4 ) unless( defined( *{'List::MoreUtils::bsearch'}{CODE} ) );
 is tt( q/[% PERL %] my $fn = sub { $_[0] <=> 3 }; $stash->set( cmp3 => $fn ); [% END %]/,
        q{[% my1to9prim.bsearch( \cmp3 ) ? "Found" : "Not found" %]} ), "Found", "bsearch 1/4";
 is tt( q/[% PERL %] my $fn = sub { $_[0] cmp 'e' }; $stash->set( cmpe => $fn ); [% END %]/,
@@ -114,7 +115,15 @@ is tt( q/[% PERL %] my $fn = sub { 3 <=> $_[0] }; $stash->set( cmp3 => $fn ); [%
        q{[% my1to9prim.reverse.bsearch( \cmp3 ) ? "Found" : "Not found" %]} ), "Found", "bsearch 3/4";
 is tt( q/[% PERL %] my $fn = sub { $_[0] <=> 9 }; $stash->set( cmp9 => $fn ); [% END %]/,
        q{[% my1to9prim.bsearch( \cmp9 ) ? "Found" : "Not found" %]} ), "Not found", "bsearch 4/4";
-}
+
+is tt( q/[% PERL %] my $fn = sub { $_[0] <=> 3 }; $stash->set( cmp3 => $fn ); [% END %]/,
+       q{[% my1to9prim.bsearchidx( \cmp3 ) %]} ), "1", "bsearchidx 1/4";
+is tt( q/[% PERL %] my $fn = sub { $_[0] cmp 'e' }; $stash->set( cmpe => $fn ); [% END %]/,
+       q{[% fiveletters.bsearchidx( \cmpe ) %]} ), "4", "bsearchidx 2/4";
+is tt( q/[% PERL %] my $fn = sub { 3 <=> $_[0] }; $stash->set( cmp3 => $fn ); [% END %]/,
+       q{[% my1to9prim.reverse.bsearchidx( \cmp3 ) %]} ), "2", "bsearchidx 3/4";
+is tt( q/[% PERL %] my $fn = sub { $_[0] <=> 9 }; $stash->set( cmp9 => $fn ); [% END %]/,
+       q{[% my1to9prim.bsearchidx( \cmp9 ) %]} ), "-1", "bsearchidx 4/4";
 
 sub tt
 {
